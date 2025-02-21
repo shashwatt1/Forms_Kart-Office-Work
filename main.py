@@ -52,7 +52,6 @@ def main():
     st.header("Student Details")
     rank = st.number_input(
         "Enter the student's expected/actual rank:", 
-        min_value= , 
         help="Rank based on JEE Advanced/Main results."
     )
     seat_type = st.selectbox(
