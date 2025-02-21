@@ -16,7 +16,8 @@ def main():
 
     # Title and description
     st.title("🎓 JEE Advanced/Main College Predictor")
-    st.write("📊 This tool basically shows the college which is most likely student can get as per Last Year trend")
+    st.write("This tool provides students with insights into the most probable colleges they can secure admission to based on the previous year's cutoff trends.")
+    st.write("Data Source: JOSAA")
 
     # Load the data with a spinner
     with st.spinner("Loading data..."):
