@@ -35,7 +35,7 @@ def main():
                 data = load_data("NIT")
 
             total_entries = len(data)
-            st.success(f"Total entries: {total_entries}")
+            
         except FileNotFoundError as e:
             st.error(f"Error: {e}")
             return
@@ -48,7 +48,7 @@ def main():
         st.metric(label="Total Branches", value=len(data["branch"].unique()))
 
     # Input fields for student details
-    st.header("📝 Student Details")
+    st.header("Student Details")
     rank = st.number_input(
         "Enter the student's expected/actual rank:", 
         min_value=1, 
@@ -65,7 +65,7 @@ def main():
         help="Gender-specific seats available."
     )
 
-    if st.button("🚀 Predict Colleges"):
+    if st.button("Predict Colleges"):
         # Filter data
         filtered_data = filter_data(data, rank, seat_type, gender)
 
@@ -79,7 +79,7 @@ def main():
             # Display the most likely college and branch (closest match)
             most_likely_college = sorted_data.iloc[0]["institute"]
             most_likely_branch = sorted_data.iloc[0]["branch"]
-            st.subheader(f"🎯 Most Likely Option at Rank {rank}:")
+            st.subheader(f"Most Likely Option at Rank {rank}:")
             st.write(f"**🏫 College:** {most_likely_college}")
             st.write(f"**📚 Branch:** {most_likely_branch}")
 
