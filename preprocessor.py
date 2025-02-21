@@ -10,17 +10,17 @@ def load_data(college_type):
     if college_type == "IIT":
         # File paths for IIT categories
         files = {
-            "OPEN": "data/OPEN_Cat_Forms_Kart.csv",
-            "OBC-NCL": "data/OBC_NCL_Forms_Kart_2024_IIT.csv",
-            "EWS": "data/EWS_Cat_Forms_Kart_IIT_24.csv",
-            "ST": "data/ST_Category_IIT_2024_Forms_kart.csv",
-            "SC": "data/SC_Data_IIT_2024.csv"
+            "OPEN": "OPEN_Cat_Forms_Kart.csv",
+            "OBC-NCL": "OBC_NCL_Forms_Kart_2024_IIT.csv",
+            "EWS": "EWS_Cat_Forms_Kart_IIT_24.csv",
+            "ST": "ST_Category_IIT_2024_Forms_kart.csv",
+            "SC": "SC_Data_IIT_2024.csv"
         }
     else:
         # File paths for NIT categories
         files = {
-            "OPEN": "data/OS_Only_NIT_Open_Cat.csv",
-            "EWS": "data/OS_NITs_EWS_Cat.csv"
+            "OPEN": "OS_Only_NIT_Open_Cat.csv",
+            "EWS": "OS_NITs_EWS_Cat.csv"
         }
 
     # Load data for all categories
