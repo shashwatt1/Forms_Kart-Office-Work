@@ -52,7 +52,7 @@ def main():
     st.header("Student Details")
     rank = st.number_input(
         "Enter the student's expected/actual rank:", 
-        min_value=1, 
+        min_value= , 
         help="Rank based on JEE Advanced/Main results."
     )
     seat_type = st.selectbox(
@@ -66,7 +66,7 @@ def main():
         help="Gender-specific seats available."
     )
 
-    if st.button("Predict Colleges"):
+    if st.button("Show Colleges"):
         # Filter data
         filtered_data = filter_data(data, rank, seat_type, gender)
 
