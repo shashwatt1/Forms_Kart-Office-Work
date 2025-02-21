@@ -12,7 +12,7 @@ def main():
     )
 
     # Add a logo
-    st.image("logo.png", width=200)
+    st.image("Logo.png", width=200)
 
     # Title and description
     st.title("🎓 JEE Advanced/Main College Predictor")
