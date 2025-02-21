@@ -35,7 +35,7 @@ def main():
                 data = load_data("NIT")
 
             total_entries = len(data)
-            st.success(f"Data loaded successfully! Total entries: {total_entries}")
+            st.success(f"Total entries: {total_entries}")
         except FileNotFoundError as e:
             st.error(f"Error: {e}")
             return
