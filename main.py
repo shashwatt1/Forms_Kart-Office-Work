@@ -145,15 +145,23 @@ def main():
         # Apply branch preference filter
         if use_default_branch_preference:
             # Apply default branch preference order
-            filtered_data = filtered_data[filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
+            default_branches_data = filtered_data[filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
             # Sort by default branch preference and IIT order
-            filtered_data["branch_order"] = filtered_data["branch"].apply(
+            default_branches_data["branch_order"] = default_branches_data["branch"].apply(
                 lambda x: DEFAULT_BRANCH_PREFERENCE.index(x) if x in DEFAULT_BRANCH_PREFERENCE else len(DEFAULT_BRANCH_PREFERENCE)
             )
-            filtered_data["institute_order"] = filtered_data["institute"].apply(
+            default_branches_data["institute_order"] = default_branches_data["institute"].apply(
                 lambda x: ALL_23_IITS.index(x) if x in ALL_23_IITS else len(ALL_23_IITS)
             )
-            filtered_data = filtered_data.sort_values(by=["branch_order", "institute_order"])
+            default_branches_data = default_branches_data.sort_values(by=["branch_order", "institute_order"])
+
+            # Get remaining branches (not in default preference)
+            remaining_branches_data = filtered_data[~filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
+            # Sort remaining branches by closing rank
+            remaining_branches_data = remaining_branches_data.sort_values(by="closing_rank")
+
+            # Combine default and remaining branches
+            filtered_data = pd.concat([default_branches_data, remaining_branches_data])
         elif preferred_branches:
             # Apply user-selected branch preferences
             filtered_data = filtered_data[filtered_data["branch"].isin(preferred_branches)]
