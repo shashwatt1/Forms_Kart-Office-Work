@@ -133,7 +133,7 @@ def main():
         help="Check this box to include 5-year courses (e.g., Dual Degree programs)."
     )
 
-    if st.button("🚀 Predict Colleges"):
+    if st.button("Show Colleges"):
         # Check if branch preferences are selected
         if not use_default_branch_preference and not preferred_branches:
             st.warning("Please select the branch preference.")
