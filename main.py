@@ -29,7 +29,22 @@ ALL_23_IITS = [
     "Indian Institute of Technology Kharagpur",
     "Indian Institute of Technology Roorkee",
     "Indian Institute of Technology Guwahati",
-    # Add the remaining IITs here
+    "Indian Institute of Technology Hyderabad",
+    "Indian Institute of Technology Indore",
+    "Indian Institute of Technology (BHU) Varanasi",
+    "Indian Institute of Technology Bhubaneswar",
+    "Indian Institute of Technology Gandhinagar",
+    "Indian Institute of Technology Jodhpur",
+    "Indian Institute of Technology Patna",
+    "Indian Institute of Technology Ropar",
+    "Indian Institute of Technology Mandi",
+    "Indian Institute of Technology Palakkad",
+    "Indian Institute of Technology Tirupati",
+    "Indian Institute of Technology Dhanbad",
+    "Indian Institute of Technology Bhilai",
+    "Indian Institute of Technology Goa",
+    "Indian Institute of Technology Jammu",
+    "Indian Institute of Technology Dharwad"
 ]
 
 # Main App
@@ -79,7 +94,7 @@ def main():
             return
 
     # Input fields for student details
-    st.header("📝 Student Details")
+    st.header("Student Details")
     rank = st.number_input(
         "Enter the student's expected/actual rank:", 
         min_value=1, 
@@ -98,11 +113,19 @@ def main():
 
     # Branch preference filter
     st.subheader("Branch Preferences")
-    preferred_branches = st.multiselect(
-        "Select your preferred branches:",
-        options=data["branch"].unique(),
-        help="Choose the branches you are interested in."
+    use_default_branch_preference = st.checkbox(
+        "Default Branch Preference Order",
+        help="Check this box to use the default branch preference order (CSE, ECE, EEE for IITs)."
     )
+
+    if not use_default_branch_preference:
+        preferred_branches = st.multiselect(
+            "Select your preferred branches:",
+            options=data["branch"].unique(),
+            help="Choose the branches you are interested in."
+        )
+    else:
+        preferred_branches = []
 
     # 5-Year course filter
     include_5_year_courses = st.checkbox(
@@ -111,13 +134,16 @@ def main():
     )
 
     if st.button("🚀 Predict Colleges"):
+        # Check if branch preferences are selected
+        if not use_default_branch_preference and not preferred_branches:
+            st.warning("Please select the branch preference.")
+            return
+
         # Filter data based on rank, seat type, and gender
         filtered_data = filter_data(data, rank, seat_type, gender)
 
         # Apply branch preference filter
-        if preferred_branches:
-            filtered_data = filtered_data[filtered_data["branch"].isin(preferred_branches)]
-        else:
+        if use_default_branch_preference:
             # Apply default branch preference order
             filtered_data = filtered_data[filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
             # Sort by default branch preference and IIT order
@@ -128,6 +154,9 @@ def main():
                 lambda x: ALL_23_IITS.index(x) if x in ALL_23_IITS else len(ALL_23_IITS)
             )
             filtered_data = filtered_data.sort_values(by=["branch_order", "institute_order"])
+        elif preferred_branches:
+            # Apply user-selected branch preferences
+            filtered_data = filtered_data[filtered_data["branch"].isin(preferred_branches)]
 
         # Apply 5-Year course filter
         if not include_5_year_courses:
@@ -150,11 +179,11 @@ def main():
                 closing_rank = sorted_data.iloc[i]["closing_rank"]
                 rank_diff = sorted_data.iloc[i]["rank_difference"]
 
-                st.write(f"**🏫 College:** {college}")
-                st.write(f"**📚 Branch:** {branch}")
-                st.write(f"**📊 Opening Rank:** {opening_rank}")
-                st.write(f"**📊 Closing Rank:** {closing_rank}")
-                st.write(f"**📈 Rank Difference:** {rank_diff}")
+                st.write(f"**College:** {college}")
+                st.write(f"**Branch:** {branch}")
+                st.write(f"**Opening Rank:** {opening_rank}")
+                st.write(f"**Closing Rank:** {closing_rank}")
+                st.write(f"**Rank Difference:** {rank_diff}")
                 st.markdown("---")  # Add a separator between options
 
             # Highlight rows where closing rank is within ±50 of the student's rank
@@ -168,7 +197,7 @@ def main():
             highlighted_data = sorted_data.style.apply(highlight_row, axis=1)
 
             # Display filtered results
-            st.subheader("📋 Filtered Colleges and Branches")
+            st.subheader("Filtered Colleges and Branches")
             st.dataframe(highlighted_data)
 
             # Download option
@@ -181,7 +210,7 @@ def main():
             )
 
             # Plot graphs
-            st.subheader("📊 Visualization")
+            st.subheader("Visualization")
             bar_chart, pie_chart = plot_graphs(sorted_data)
             st.plotly_chart(bar_chart, use_container_width=True)
             st.plotly_chart(pie_chart, use_container_width=True)
