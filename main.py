@@ -102,7 +102,7 @@ def main():
 
             # Display the top 5 closest matches
             st.subheader(f"🎯 Top 5 Most Likely Options at Rank {rank}:")
-            for i in range(min(5, len(sorted_data)):  # Show up to 5 options
+            for i in range(min(5, len(sorted_data))):  # Show up to 5 options
                 college = sorted_data.iloc[i]["institute"]
                 branch = sorted_data.iloc[i]["branch"]
                 opening_rank = sorted_data.iloc[i]["opening_rank"]
