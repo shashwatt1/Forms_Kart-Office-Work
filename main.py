@@ -2,6 +2,36 @@ import streamlit as st
 from preprocessor import load_data
 from helper import filter_data, plot_graphs, convert_df
 
+# Define the default branch preference order
+DEFAULT_BRANCH_PREFERENCE = [
+    "Computer Science and Engineering",
+    "Electronics and Communication Engineering",
+    "Electrical and Electronics Engineering"
+]
+
+# Define the top 7 IITs (placeholder - update with the actual order)
+TOP_7_IITS = [
+    "Indian Institute of Technology Bombay",
+    "Indian Institute of Technology Delhi",
+    "Indian Institute of Technology Madras",
+    "Indian Institute of Technology Kanpur",
+    "Indian Institute of Technology Kharagpur",
+    "Indian Institute of Technology Roorkee",
+    "Indian Institute of Technology Guwahati"
+]
+
+# Define all 23 IITs (placeholder - update with the actual order)
+ALL_23_IITS = [
+    "Indian Institute of Technology Bombay",
+    "Indian Institute of Technology Delhi",
+    "Indian Institute of Technology Madras",
+    "Indian Institute of Technology Kanpur",
+    "Indian Institute of Technology Kharagpur",
+    "Indian Institute of Technology Roorkee",
+    "Indian Institute of Technology Guwahati",
+    # Add the remaining IITs here
+]
+
 # Main App
 def main():
     # Set page config
@@ -12,7 +42,7 @@ def main():
     )
 
     # Add a logo
-    st.image("Logo.PNG", width=200)
+    st.image("Logo.png", width=200)
 
     # Title and description
     st.title("🎓 JEE Advanced/Main College Predictor")
@@ -87,6 +117,17 @@ def main():
         # Apply branch preference filter
         if preferred_branches:
             filtered_data = filtered_data[filtered_data["branch"].isin(preferred_branches)]
+        else:
+            # Apply default branch preference order
+            filtered_data = filtered_data[filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
+            # Sort by default branch preference and IIT order
+            filtered_data["branch_order"] = filtered_data["branch"].apply(
+                lambda x: DEFAULT_BRANCH_PREFERENCE.index(x) if x in DEFAULT_BRANCH_PREFERENCE else len(DEFAULT_BRANCH_PREFERENCE)
+            )
+            filtered_data["institute_order"] = filtered_data["institute"].apply(
+                lambda x: ALL_23_IITS.index(x) if x in ALL_23_IITS else len(ALL_23_IITS)
+            )
+            filtered_data = filtered_data.sort_values(by=["branch_order", "institute_order"])
 
         # Apply 5-Year course filter
         if not include_5_year_courses:
