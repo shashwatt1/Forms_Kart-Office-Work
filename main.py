@@ -70,7 +70,7 @@ def main():
             # Input field for college type
             college_type = st.selectbox(
                 "Select College Type:",
-                ["Indian Institute of Technology (IIT)", "National Institute of Technology (NIT)"],
+                ["Indian Institute of Technology (IIT)", "National Institute of Technology (NIT)", "Indian Institute of Information Technology (IIIT) ],
                 help="Choose the type of college you want to predict for."
             )
 
