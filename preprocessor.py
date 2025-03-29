@@ -20,7 +20,10 @@ def load_data(college_type):
         # File paths for NIT categories
         files = {
             "OPEN": "data/OS_Only_NIT_Open_Cat.csv",
-            "EWS": "data/OS_NITs_EWS_Cat.csv"
+            "EWS": "data/OS_NITs_EWS_Cat.csv",
+            "OBC-NCL": "data/NITs_OS_OBC_NCL.csv",
+            "SC": "data/SC_NIT_OS.csv",
+            "ST": "data/OS_NITs_ST.csv"
         }
 
     # Load data for all categories
