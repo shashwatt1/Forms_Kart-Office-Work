@@ -65,9 +65,38 @@ def main():
         help="Gender-specific seats available."
     )
 
+    # New filtering options
+    st.header("🎛️ Filter Options")
+    col1, col2 = st.columns(2)
+    with col1:
+        default_preference = st.checkbox(
+            "Show only default branches (Popular branches)",
+            value=True,
+            help="Filter to show only commonly preferred branches like CSE, ECE, etc."
+        )
+        five_year_course = st.checkbox(
+            "Exclude 5-year dual degree courses",
+            value=True,
+            help="Filter out 5-year integrated programs"
+        )
+    with col2:
+        branch_preference = st.multiselect(
+            "Select preferred branches (leave empty for all):",
+            options=data["branch"].unique(),
+            help="Choose specific branches you're interested in"
+        )
+
     if st.button("🚀 Predict Colleges"):
         # Filter data
-        filtered_data = filter_data(data, rank, seat_type, gender)
+        filtered_data = filter_data(
+            data, 
+            rank, 
+            seat_type, 
+            gender,
+            default_preference,
+            five_year_course,
+            branch_preference if branch_preference else None
+        )
 
         if not filtered_data.empty:
             # Calculate the absolute difference between the input rank and closing rank
