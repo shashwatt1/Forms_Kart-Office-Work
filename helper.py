@@ -1,32 +1,50 @@
 import pandas as pd
 import plotly.express as px
 
-# Helper Function: Filter Data
-def filter_data(data, rank, seat_type, gender):
-    """
-    Filters the data based on rank, seat type, and gender.
-    Returns a filtered DataFrame.
-    """
-    filtered = data[
-        (data["closing_rank"] >= rank) &  # Filter by closing rank greater than or equal to student's rank
-        (data["seat_type"] == seat_type) &  # Filter by selected seat type
-        (data["gender"] == gender)  # Filter by selected gender
-    ]
+# Default branches for filtering
+DEFAULT_BRANCHES = {
+    'IIT': ['Computer Science and Engineering', 'Electrical Engineering', 
+            'Mechanical Engineering', 'Electronics and Communication Engineering',
+            'Chemical Engineering', 'Civil Engineering'],
+    'NIT': ['Computer Science and Engineering', 'Electrical Engineering',
+            'Electronics and Communication Engineering', 'Mechanical Engineering',
+            'Civil Engineering', 'Information Technology']
+}
 
-    # Highlight rows where closing rank is within ± 100 of the student's rank
-    filtered["highlight"] = filtered["closing_rank"].apply(lambda x: "lightgreen" if abs(x - rank) <= 100 else "")
+def filter_data(data, rank, seat_type, gender, default_preference=True, 
+                exclude_five_year=True, branch_preference=None):
+    """
+    Filters the data based on multiple criteria.
+    """
+    # Basic filtering
+    filtered = data[
+        (data["closing_rank"] >= rank) &
+        (data["seat_type"] == seat_type) &
+        (data["gender"] == gender)
+    ].copy()
+    
+    # Apply default branch filter if enabled
+    if default_preference:
+        college_type = 'IIT' if 'Indian Institute of Technology' in filtered['institute'].iloc[0] else 'NIT'
+        filtered = filtered[filtered['branch'].isin(DEFAULT_BRANCHES[college_type])]
+    
+    # Exclude 5-year courses if enabled
+    if exclude_five_year:
+        filtered = filtered[~filtered['branch'].str.contains('Dual Degree|Integrated|5 Year')]
+    
+    # Apply branch preference filter if specified
+    if branch_preference:
+        filtered = filtered[filtered['branch'].isin(branch_preference)]
     
     return filtered
 
-# Helper Function: Convert DataFrame to CSV for Download
 def convert_df(df):
     """Converts a DataFrame to CSV for download."""
     return df.to_csv(index=False).encode('utf-8')
 
-# Helper Function: Plot Graphs
 def plot_graphs(filtered_data):
     """
-    Generates and saves interactive visualizations for filtered data.
+    Generates visualizations for filtered data.
     """
     # Bar chart: Number of branches per institute
     bar_chart = px.bar(
