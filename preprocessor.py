@@ -18,10 +18,22 @@ def load_data(college_type):
         }
     else:
         # File paths for NIT categories
+        college_type == "NIT":
         files = {
             "OPEN": "OS_Only_NIT_Open_Cat.csv",
-            "EWS": "OS_NITs_EWS_Cat.csv"
-        }
+            "EWS": "OS_NITs_EWS_Cat.csv",
+            "OBC-NCL": "NITs_OS_OBC_NCL.csv",
+            "ST": "OS_NITs_ST.csv",
+            "SC": "SC_NIT_OS.csv"
+            
+            }
+     elif
+        files = {
+             "OPEN": " ",
+            "OBC-NCL": " ",
+            "EWS": " ",
+            "ST": " ",
+            "SC": " "
 
     # Load data for all categories
     combined_data = pd.DataFrame()
