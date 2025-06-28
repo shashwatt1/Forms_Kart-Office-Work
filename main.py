@@ -1,5 +1,5 @@
 import streamlit as st
-import pandas as pd  # Add this import for pandas
+import pandas as pd
 from preprocessor import load_data
 from helper import filter_data, plot_graphs, convert_df
 
@@ -10,18 +10,7 @@ DEFAULT_BRANCH_PREFERENCE = [
     "Electrical and Electronics Engineering"
 ]
 
-# Define the top 7 IITs (placeholder - update with the actual order)
-TOP_7_IITS = [
-    "Indian Institute of Technology Bombay",
-    "Indian Institute of Technology Delhi",
-    "Indian Institute of Technology Madras",
-    "Indian Institute of Technology Kanpur",
-    "Indian Institute of Technology Kharagpur",
-    "Indian Institute of Technology Roorkee",
-    "Indian Institute of Technology Guwahati"
-]
-
-# Define all 23 IITs (placeholder - update with the actual order)
+# Define all 23 IITs
 ALL_23_IITS = [
     "Indian Institute of Technology Bombay",
     "Indian Institute of Technology Delhi",
@@ -48,7 +37,6 @@ ALL_23_IITS = [
     "Indian Institute of Technology Dharwad"
 ]
 
-# Main App
 def main():
     st.set_page_config(
         page_title="🎓 JEE Advanced/Main College Predictor",
@@ -80,7 +68,8 @@ def main():
                 if isinstance(df, pd.DataFrame):
                     df.columns = df.columns.astype(str).str.strip().str.lower()
 
-            merged_df = pd.concat(data.values(), ignore_index=True)
+            valid_dfs = [df for df in data.values() if isinstance(df, pd.DataFrame)]
+            merged_df = pd.concat(valid_dfs, ignore_index=True)
 
             col1, col2 = st.columns(2)
             with col1:
