@@ -74,14 +74,15 @@ def main():
                 help="Choose the type of college you want to predict for."
             )
 
-            # Load data based on college type
+           
+           # Load data based on college type
             if college_type == "Indian Institute of Technology (IIT)":
-                data = load_data("IIT")
-            else:
-                college_type == "National Institute of Technology (NIT)":
-                data = load_data("NIT")
-            elif:
-                college_type == "Indian Insitute of Information Technology (IIIT)":
+            data = load_data("IIT")
+            elif college_type == "National Institute of Technology (NIT)":
+            data = load_data("NIT")
+            elif college_type == "Indian Institute of Information Technology (IIIT)":
+            data = load_data("IIIT")
+
 
             # Remove the "Data loaded successfully!" prompt
             # st.success(f"Data loaded successfully! Total entries: {len(data)}")
