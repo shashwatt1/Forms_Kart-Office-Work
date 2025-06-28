@@ -84,7 +84,8 @@ def main():
 
             # Clean column names in each DataFrame
             for df in data.values():
-                df.columns = df.columns.str.strip().str.lower()
+    if isinstance(df, pd.DataFrame):
+        df.columns = df.columns.astype(str).str.strip().str.lower()
 
             # Display summary metrics in columns
             merged_df = pd.concat(data.values(), ignore_index=True)
