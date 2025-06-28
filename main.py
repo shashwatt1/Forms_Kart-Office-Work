@@ -82,15 +82,17 @@ def main():
             elif college_type == "Indian Institute of Information Technology (IIIT)":
                 data = load_data("IIIT")
 
-            # Clean column names
-            data.columns = data.columns.str.strip().str.lower()
+            # Clean column names in each DataFrame
+            for df in data.values():
+                df.columns = df.columns.str.strip().str.lower()
 
             # Display summary metrics in columns
+            merged_df = pd.concat(data.values(), ignore_index=True)
             col1, col2 = st.columns(2)
             with col1:
-                st.metric(label="Total Colleges", value=len(data["institute"].unique()))
+                st.metric(label="Total Colleges", value=len(merged_df["institute"].unique()))
             with col2:
-                st.metric(label="Total Branches", value=len(data["branch"].unique()))
+                st.metric(label="Total Branches", value=len(merged_df["branch"].unique()))
 
         except FileNotFoundError as e:
             st.error(f"Error: {e}")
@@ -124,7 +126,7 @@ def main():
     if not use_default_branch_preference:
         preferred_branches = st.multiselect(
             "Select your preferred branches:",
-            options=data["branch"].unique(),
+            options=merged_df["branch"].unique(),
             help="Choose the branches you are interested in."
         )
     else:
@@ -143,13 +145,11 @@ def main():
             return
 
         # Filter data based on rank, seat type, and gender
-        filtered_data = filter_data(data, rank, seat_type, gender)
+        filtered_data = filter_data(merged_df, rank, seat_type, gender)
 
         # Apply branch preference filter
         if use_default_branch_preference:
-            # Apply default branch preference order
             default_branches_data = filtered_data[filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
-            # Sort by default branch preference and IIT order
             default_branches_data["branch_order"] = default_branches_data["branch"].apply(
                 lambda x: DEFAULT_BRANCH_PREFERENCE.index(x) if x in DEFAULT_BRANCH_PREFERENCE else len(DEFAULT_BRANCH_PREFERENCE)
             )
@@ -158,32 +158,22 @@ def main():
             )
             default_branches_data = default_branches_data.sort_values(by=["branch_order", "institute_order"])
 
-            # Get remaining branches (not in default preference)
             remaining_branches_data = filtered_data[~filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
-            # Sort remaining branches by closing rank
             remaining_branches_data = remaining_branches_data.sort_values(by="closing_rank")
 
-            # Combine default and remaining branches
             filtered_data = pd.concat([default_branches_data, remaining_branches_data])
         elif preferred_branches:
-            # Apply user-selected branch preferences
             filtered_data = filtered_data[filtered_data["branch"].isin(preferred_branches)]
 
-        # Apply 5-Year course filter
         if not include_5_year_courses:
-            # Exclude 5-year courses (assuming they contain "Dual Degree" or "Integrated" in the branch name)
             filtered_data = filtered_data[~filtered_data["branch"].str.contains("Dual Degree|Integrated")]
 
         if not filtered_data.empty:
-            # Calculate the absolute difference between the input rank and closing rank
             filtered_data["rank_difference"] = abs(filtered_data["closing_rank"] - rank)
-
-            # Sort the data by rank difference to find the closest matches
             sorted_data = filtered_data.sort_values(by="rank_difference")
 
-            # Display the top 5 closest matches
             st.subheader(f"🌟 Top 5 Most Likely Options at Rank {rank}:")
-            for i in range(min(5, len(sorted_data))):  # Show up to 5 options
+            for i in range(min(5, len(sorted_data))):
                 college = sorted_data.iloc[i]["institute"]
                 branch = sorted_data.iloc[i]["branch"]
                 opening_rank = sorted_data.iloc[i]["opening_rank"]
@@ -195,23 +185,19 @@ def main():
                 st.write(f"**Opening Rank:** {opening_rank}")
                 st.write(f"**Closing Rank:** {closing_rank}")
                 st.write(f"**Rank Difference:** {rank_diff}")
-                st.markdown("---")  # Add a separator between options
+                st.markdown("---")
 
-            # Highlight rows where closing rank is within ±50 of the student's rank
             def highlight_row(row):
                 if abs(row["closing_rank"] - rank) <= 50:
                     return ["background-color: lightgreen"] * len(row)
                 else:
                     return [""] * len(row)
 
-            # Apply the highlight function to the DataFrame
             highlighted_data = sorted_data.style.apply(highlight_row, axis=1)
 
-            # Display filtered results
             st.subheader("Filtered Colleges and Branches")
             st.dataframe(highlighted_data)
 
-            # Download option
             csv = convert_df(sorted_data)
             st.download_button(
                 label="📅 Download Filtered Data as CSV",
@@ -220,17 +206,14 @@ def main():
                 mime="text/csv",
             )
 
-            # Plot graphs
             st.subheader("Visualization")
             bar_chart, pie_chart = plot_graphs(sorted_data)
             st.plotly_chart(bar_chart, use_container_width=True)
             st.plotly_chart(pie_chart, use_container_width=True)
 
         else:
-            # Show a pop-up message if no data is found
             st.warning("Sorry! No data found for the given rank, seat type, and gender. Try different inputs.")
 
-    # Footer
     st.markdown("---")
     st.markdown("Developed by **[Shashwat Malviya](https://www.linkedin.com/in/shashwatt1/)**")
 
