@@ -84,7 +84,7 @@ def main():
 
             # Clean column names in each DataFrame
             for df in data.values():
-    if isinstance(df, pd.DataFrame):
+                if isinstance(df, pd.DataFrame):
         df.columns = df.columns.astype(str).str.strip().str.lower()
 
             # Display summary metrics in columns
