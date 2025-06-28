@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-# Helper Function: Load and Clean Data
+ # Helper Function: Load and Clean Data
 def load_data(college_type):
     """
     Loads and cleans the college cutoff data from the specified CSV files.
@@ -16,26 +16,28 @@ def load_data(college_type):
             "ST": "ST_Category_IIT_2024_Forms_kart.csv",
             "SC": "SC_Data_IIT_2024.csv"
         }
-    elif:
-          
-          college_type == "National Institute of Technology (NIT)":
-          files = {
+    elif college_type == "National Institute of Technology (NIT)":
+        files = {
             "OPEN": "OS_Only_NIT_Open_Cat.csv",
             "EWS": "OS_NITs_EWS_Cat.csv",
             "OBC-NCL": "NITs_OS_OBC_NCL.csv",
             "ST": "OS_NITs_ST.csv",
             "SC": "SC_NIT_OS.csv"
-            
-            }
-     elif:
-           college_type == "Indian Institute of Information Technology (IIIT)":
-           files = {
-             "OPEN": " ",
-            "OBC-NCL": " ",
-            "EWS": " ",
-            "ST": " ",
-            "SC": " "
+        }
+    elif college_type == "Indian Institute of Information Technology (IIIT)":
+        files = {
+            "OPEN": "",
+            "OBC-NCL": "",
+            "EWS": "",
+            "ST": "",
+            "SC": ""
+        }
+    else:
+        raise ValueError("Unsupported college type")
 
+    return files  # or return your DataFrame after loading from these files
+
+  
     # Load data for all categories
     combined_data = pd.DataFrame()
     for category, file_path in files.items():
