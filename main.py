@@ -77,11 +77,11 @@ def main():
            
            # Load data based on college type
             if college_type == "Indian Institute of Technology (IIT)":
-            data = load_data("IIT")
+                data = load_data("IIT")
             elif college_type == "National Institute of Technology (NIT)":
-            data = load_data("NIT")
+                data = load_data("NIT")
             elif college_type == "Indian Institute of Information Technology (IIIT)":
-            data = load_data("IIIT")
+                data = load_data("IIIT")
 
 
             # Remove the "Data loaded successfully!" prompt
