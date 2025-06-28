@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 from preprocessor import load_data
 from helper import filter_data, plot_graphs, convert_df
 
@@ -10,7 +9,7 @@ DEFAULT_BRANCH_PREFERENCE = [
     "Electrical and Electronics Engineering"
 ]
 
-# Define all 23 IITs
+# Define all 23 IITs (placeholder - update with actual list if needed)
 ALL_23_IITS = [
     "Indian Institute of Technology Bombay",
     "Indian Institute of Technology Delhi",
@@ -53,29 +52,23 @@ def main():
         try:
             college_type = st.selectbox(
                 "Select College Type:",
-                ["Indian Institute of Technology (IIT)", "National Institute of Technology (NIT)", "Indian Institute of Information Technology (IIIT)"],
+                ["Indian Institute of Technology (IIT)", "National Institute of Technology (NIT)"],
                 help="Choose the type of college you want to predict for."
             )
 
             if college_type == "Indian Institute of Technology (IIT)":
                 data = load_data("IIT")
-            elif college_type == "National Institute of Technology (NIT)":
+            else:
                 data = load_data("NIT")
-            elif college_type == "Indian Institute of Information Technology (IIIT)":
-                data = load_data("IIIT")
 
-            for df in data.values():
-                if isinstance(df, pd.DataFrame):
-                    df.columns = df.columns.astype(str).str.strip().str.lower()
-
-            valid_dfs = [df for df in data.values() if isinstance(df, pd.DataFrame)]
-            merged_df = pd.concat(valid_dfs, ignore_index=True)
+            # Clean column names for safety
+            data.columns = data.columns.astype(str).str.strip().str.lower()
 
             col1, col2 = st.columns(2)
             with col1:
-                st.metric(label="Total Colleges", value=len(merged_df["institute"].unique()))
+                st.metric(label="Total Colleges", value=len(data["institute"].unique()))
             with col2:
-                st.metric(label="Total Branches", value=len(merged_df["branch"].unique()))
+                st.metric(label="Total Branches", value=len(data["branch"].unique()))
 
         except FileNotFoundError as e:
             st.error(f"Error: {e}")
@@ -90,7 +83,7 @@ def main():
     use_default_branch_preference = st.checkbox("Default Branch Preference Order")
 
     if not use_default_branch_preference:
-        preferred_branches = st.multiselect("Select your preferred branches:", options=merged_df["branch"].unique())
+        preferred_branches = st.multiselect("Select your preferred branches:", options=data["branch"].unique())
     else:
         preferred_branches = []
 
@@ -101,20 +94,17 @@ def main():
             st.warning("Please select the branch preference.")
             return
 
-        filtered_data = filter_data(merged_df, rank, seat_type, gender)
+        filtered_data = filter_data(data, rank, seat_type, gender)
 
         if use_default_branch_preference:
-            default_branches_data = filtered_data[filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
-            default_branches_data["branch_order"] = default_branches_data["branch"].apply(
+            filtered_data = filtered_data[filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
+            filtered_data["branch_order"] = filtered_data["branch"].apply(
                 lambda x: DEFAULT_BRANCH_PREFERENCE.index(x) if x in DEFAULT_BRANCH_PREFERENCE else len(DEFAULT_BRANCH_PREFERENCE)
             )
-            default_branches_data["institute_order"] = default_branches_data["institute"].apply(
+            filtered_data["institute_order"] = filtered_data["institute"].apply(
                 lambda x: ALL_23_IITS.index(x) if x in ALL_23_IITS else len(ALL_23_IITS)
             )
-            default_branches_data = default_branches_data.sort_values(by=["branch_order", "institute_order"])
-            remaining_branches_data = filtered_data[~filtered_data["branch"].isin(DEFAULT_BRANCH_PREFERENCE)]
-            remaining_branches_data = remaining_branches_data.sort_values(by="closing_rank")
-            filtered_data = pd.concat([default_branches_data, remaining_branches_data])
+            filtered_data = filtered_data.sort_values(by=["branch_order", "institute_order"])
         elif preferred_branches:
             filtered_data = filtered_data[filtered_data["branch"].isin(preferred_branches)]
 
