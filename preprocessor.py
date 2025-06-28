@@ -26,11 +26,12 @@ def load_data(college_type):
         }
     elif college_type == "Indian Institute of Information Technology (IIIT)":
         files = {
-            "OPEN": "",
-            "OBC-NCL": "",
-            "EWS": "",
-            "ST": "",
-            "SC": ""
+            "OPEN": "OPEN_IIIT_2024.csv",
+            "OBC-NCL": "OBC_IIIT_2024.csv",
+            "EWS": "EWS_IIIT_2024.csv",
+            "ST": "ST_IIIT_2024.csv",
+            "SC": "SC_IIIT_2024.csv"
+
         }
     else:
         raise ValueError("Unsupported college type")
