@@ -16,7 +16,7 @@ def load_data(college_type):
             "ST": "ST_Category_IIT_2024_Forms_kart.csv",
             "SC": "SC_Data_IIT_2024.csv"
         }
-    else:
+    elif:
         # File paths for NIT categories
         college_type == "National Institute of Technology (NIT)":
         files = {
