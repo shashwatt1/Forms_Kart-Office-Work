@@ -78,7 +78,10 @@ def main():
             if college_type == "Indian Institute of Technology (IIT)":
                 data = load_data("IIT")
             else:
+                college_type == "National Institute of Technology (NIT)":
                 data = load_data("NIT")
+            elif:
+                college_type == "Indian Insitute of Information Technology (IIIT)":
 
             # Remove the "Data loaded successfully!" prompt
             # st.success(f"Data loaded successfully! Total entries: {len(data)}")
