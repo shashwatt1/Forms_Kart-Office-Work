@@ -27,7 +27,8 @@ def load_data(college_type):
             "SC": "SC_NIT_OS.csv"
             
             }
-     elif
+     elif:
+        college_type == "Indian Institute of Information Technology (IIIT)":
         files = {
              "OPEN": " ",
             "OBC-NCL": " ",
