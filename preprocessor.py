@@ -13,11 +13,11 @@ def load_data(college_type):
 
     elif college_type == "National Institute of Technology (NIT)":
         files = {
-            "OPEN": "OS_Only_NIT_Open_Cat.csv",
-            "EWS": "OS_NITs_EWS_Cat.csv",
-            "OBC-NCL": "NITs_OS_OBC_NCL.csv",
-            "ST": "OS_NITs_ST.csv",
-            "SC": "SC_NIT_OS.csv"
+            "OPEN": "OS_OPEN_NIT_2024.csv",
+            "OBC-NCL": "OS_OBC_NIT_2024.csv",
+            "EWS": "OS_EWS_NIT_2024.csv",
+            "SC": "OS_SC_NIT_2024.csv",
+            "ST": "OS_ST_NIT_2024.csv"
         }
 
     elif college_type == "Indian Institute of Information Technology (IIIT)":
