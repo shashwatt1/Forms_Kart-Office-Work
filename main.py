@@ -70,12 +70,11 @@ def main():
             # Input field for college type
             college_type = st.selectbox(
                 "Select College Type:",
-                ["Indian Institute of Technology (IIT)", "National Institute of Technology (NIT)", "Indian Institute of Information Technology (IIIT)" ],
+                ["Indian Institute of Technology (IIT)", "National Institute of Technology (NIT)", "Indian Institute of Information Technology (IIIT)"],
                 help="Choose the type of college you want to predict for."
             )
 
-           
-           # Load data based on college type
+            # Load data based on college type
             if college_type == "Indian Institute of Technology (IIT)":
                 data = load_data("IIT")
             elif college_type == "National Institute of Technology (NIT)":
@@ -83,9 +82,8 @@ def main():
             elif college_type == "Indian Institute of Information Technology (IIIT)":
                 data = load_data("IIIT")
 
-
-            # Remove the "Data loaded successfully!" prompt
-            # st.success(f"Data loaded successfully! Total entries: {len(data)}")
+            # Clean column names
+            data.columns = data.columns.str.strip().str.lower()
 
             # Display summary metrics in columns
             col1, col2 = st.columns(2)
@@ -184,7 +182,7 @@ def main():
             sorted_data = filtered_data.sort_values(by="rank_difference")
 
             # Display the top 5 closest matches
-            st.subheader(f"🎯 Top 5 Most Likely Options at Rank {rank}:")
+            st.subheader(f"🌟 Top 5 Most Likely Options at Rank {rank}:")
             for i in range(min(5, len(sorted_data))):  # Show up to 5 options
                 college = sorted_data.iloc[i]["institute"]
                 branch = sorted_data.iloc[i]["branch"]
@@ -216,7 +214,7 @@ def main():
             # Download option
             csv = convert_df(sorted_data)
             st.download_button(
-                label="📥 Download Filtered Data as CSV",
+                label="📅 Download Filtered Data as CSV",
                 data=csv,
                 file_name="filtered_colleges.csv",
                 mime="text/csv",
