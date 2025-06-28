@@ -18,7 +18,7 @@ def load_data(college_type):
         }
     else:
         # File paths for NIT categories
-        college_type == "NIT":
+        college_type == "National Institute of Technology (NIT)":
         files = {
             "OPEN": "OS_Only_NIT_Open_Cat.csv",
             "EWS": "OS_NITs_EWS_Cat.csv",
