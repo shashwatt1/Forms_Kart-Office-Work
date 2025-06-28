@@ -17,9 +17,9 @@ def load_data(college_type):
             "SC": "SC_Data_IIT_2024.csv"
         }
     elif:
-        # File paths for NIT categories
-        college_type == "National Institute of Technology (NIT)":
-        files = {
+          
+          college_type == "National Institute of Technology (NIT)":
+          files = {
             "OPEN": "OS_Only_NIT_Open_Cat.csv",
             "EWS": "OS_NITs_EWS_Cat.csv",
             "OBC-NCL": "NITs_OS_OBC_NCL.csv",
@@ -28,8 +28,8 @@ def load_data(college_type):
             
             }
      elif:
-        college_type == "Indian Institute of Information Technology (IIIT)":
-        files = {
+           college_type == "Indian Institute of Information Technology (IIIT)":
+           files = {
              "OPEN": " ",
             "OBC-NCL": " ",
             "EWS": " ",
